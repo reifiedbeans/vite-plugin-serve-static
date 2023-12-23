@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-serve-static",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A Vite plugin for serving static files during local development",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   "files": [
     "dist"
   ],
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && tsup",
