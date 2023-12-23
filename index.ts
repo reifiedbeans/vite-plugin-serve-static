@@ -3,9 +3,11 @@ import path from "path";
 import { contentType } from "mime-types";
 import { Plugin } from "vite";
 
+export type ResolveFn = (match: RegExpExecArray) => string;
+
 export type Config = {
   readonly pattern: RegExp;
-  readonly resolve: string | ((path: string, groups: string[]) => string);
+  readonly resolve: string | ResolveFn;
 }[];
 
 export default function serveStatic(config: Config): Plugin {
@@ -21,8 +23,7 @@ export default function serveStatic(config: Config): Plugin {
           const match = pattern.exec(req.url);
 
           if (match) {
-            const filePath =
-              typeof resolve === "string" ? resolve : resolve(req.url, match.slice(1));
+            const filePath = typeof resolve === "string" ? resolve : resolve(match);
             const stats = fs.statSync(filePath, { throwIfNoEntry: false });
 
             if (!stats || !stats.isFile()) {
