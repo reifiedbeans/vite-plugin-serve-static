@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
+    "allowImportingTsExtensions": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "noEmit": true,
