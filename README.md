@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/vite-plugin-serve-static/latest)](https://www.npmjs.com/package/vite-plugin-serve-static)
 [![prettier](https://img.shields.io/npm/dependency-version/vite-plugin-serve-static/peer/vite)](https://github.com/vitejs/vite)
-[![license: MIT](https://img.shields.io/npm/l/vite-plugin-serve-static)](LICENSE)
+[![license: MIT](https://img.shields.io/npm/l/vite-plugin-serve-static)](https://github.com/reifiedbeans/vite-plugin-serve-static/blob/main/LICENSE)
 
 A simple Vite plugin for serving arbitrary static files that aren't in your `public` directory.
 
@@ -40,6 +40,6 @@ Each `pattern` is defined as a [regular expression]. The `resolve` property can 
 
 ## License
 
-Licensed under the [MIT License](LICENSE).
+Licensed under the [MIT License](https://github.com/reifiedbeans/vite-plugin-serve-static/blob/main/LICENSE).
 
 [regular expression]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp
