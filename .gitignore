@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Editors
+/.vscode
+/.idea
+*.iml
+
+# npm
+node_modules
+*.tgz
+
+# ESLint
+.eslintcache
+
+# Build output
+/dist
