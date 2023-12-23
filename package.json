@@ -1,10 +1,10 @@
 {
   "name": "vite-plugin-serve-static",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Vite plugin for serving static files during local development",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vitejs/vite-plugin-react.git"
+    "url": "git+https://github.com/reifiedbeans/vite-plugin-serve-static.git"
   },
   "license": "MIT",
   "homepage": "https://github.com/reifiedbeans/vite-plugin-serve-static",
