@@ -1,7 +1,7 @@
 import { Plugin } from "vite";
 
-import { Config } from "./lib/config.ts";
-import middleware from "./lib/middleware.ts";
+import { Config } from "./config.ts";
+import middleware from "./middleware.ts";
 
 export default function serveStatic(config: Config): Plugin {
   return {
@@ -15,4 +15,4 @@ export default function serveStatic(config: Config): Plugin {
   };
 }
 
-export * from "./lib/config.ts";
+export * from "./config.ts";

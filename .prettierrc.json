@@ -1,0 +1,9 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": ["^[./]"],
+  "importOrderGroupNamespaceSpecifiers": true,
+  "printWidth": 100,
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "trailingComma": "all"
+}
