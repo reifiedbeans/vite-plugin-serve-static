@@ -8,7 +8,9 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/reifiedbeans/vite-plugin-serve-static",
-  "keywords": ["vite-plugin"],
+  "keywords": [
+    "vite-plugin"
+  ],
   "type": "module",
   "files": [
     "dist"
