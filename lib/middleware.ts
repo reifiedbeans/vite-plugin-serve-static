@@ -28,7 +28,7 @@ const middleware = (config: Config): Connect.NextHandleFunction => {
         const type = contentType(path.basename(filePath));
         res.writeHead(200, {
           "Content-Length": stats.size,
-          "Content-Type": type ? type : undefined,
+          "Content-Type": type || undefined,
         });
 
         const stream = fs.createReadStream(filePath);
