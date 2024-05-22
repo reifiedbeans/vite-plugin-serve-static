@@ -7,10 +7,10 @@ export default function serveStatic(config: Config): Plugin {
   return {
     name: "serve-static",
     configureServer(server) {
-      server.middlewares.use(middleware(config));
+      return () => server.middlewares.use(middleware(config));
     },
     configurePreviewServer(server) {
-      server.middlewares.use(middleware(config));
+      return () => server.middlewares.use(middleware(config));
     },
   };
 }
