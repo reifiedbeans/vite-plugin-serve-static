@@ -58,6 +58,7 @@ export default function applyMiddleware(
   // https://github.com/vitejs/vite/blob/fcf50c2e881356ea0d725cc563722712a2bf5695/packages/vite/src/node/server/index.ts#L852-L854
   if (corsConfig !== false) {
     const config = typeof corsConfig === "boolean" ? {} : corsConfig;
+    // @ts-expect-error CorsOptions type is incompatible in Vite (waiting for fix in https://github.com/vitejs/vite/pull/17836)
     server.middlewares.use(corsMiddleware(config));
   }
 
