@@ -5,7 +5,8 @@ import { Connect } from "vite";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Config } from "../config.ts";
-import middleware from "../middleware.ts";
+import { createMiddleware } from "../middleware.ts";
+import { mockLogger } from "./mocks.ts";
 
 vi.mock("fs");
 const mockCreateReadStream = vi.mocked(fs.createReadStream);
@@ -63,12 +64,12 @@ describe("middleware", () => {
         resolve: "./hello",
       },
     ];
-    const middlewareFn = middleware(config);
+    const middleware = createMiddleware(config, mockLogger);
     const req = mockReq({ url: "/hello" });
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expect(res.writeHead).toHaveBeenCalledWith(200, expectedHeaders(50, undefined));
@@ -104,7 +105,7 @@ describe("middleware", () => {
       },
     ];
 
-    const middlewareFn = middleware(config);
+    const middleware = createMiddleware(config, mockLogger);
 
     for (const test of tests) {
       // given
@@ -113,7 +114,7 @@ describe("middleware", () => {
       const res = mockRes();
 
       // when
-      middlewareFn(req, res, mockNext);
+      middleware(req, res, mockNext);
 
       // then
       expect(res.writeHead).toHaveBeenCalledWith(200, expectedHeaders(test.size, test.type));
@@ -126,12 +127,12 @@ describe("middleware", () => {
   it("returns a 404 if the resolved path cannot be opened", () => {
     // given
     mockStatSync.mockReturnValue(undefined);
-    const middlewareFn = middleware(mockConfig);
+    const middleware = createMiddleware(mockConfig, mockLogger);
     const req = mockReq();
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expectNotFound(res);
@@ -140,12 +141,12 @@ describe("middleware", () => {
   it("returns a 404 if the resolved path does not point to a file", () => {
     // given
     mockStatSync.mockReturnValue({ isFile: () => false } as Stats);
-    const middlewareFn = middleware(mockConfig);
+    const middleware = createMiddleware(mockConfig, mockLogger);
     const req = mockReq();
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expectNotFound(res);
@@ -153,12 +154,12 @@ describe("middleware", () => {
 
   it("yields if the url is undefined", () => {
     // given
-    const middlewareFn = middleware(mockConfig);
+    const middleware = createMiddleware(mockConfig, mockLogger);
     const req = mockReq({ url: undefined });
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expectYield(res);
@@ -166,12 +167,12 @@ describe("middleware", () => {
 
   it("yields if the config is empty", () => {
     // given
-    const middlewareFn = middleware([]);
+    const middleware = createMiddleware([], mockLogger);
     const req = mockReq();
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expectYield(res);
@@ -179,12 +180,12 @@ describe("middleware", () => {
 
   it("yields if none of the config patterns match", () => {
     // given
-    const middlewareFn = middleware(mockConfig);
+    const middleware = createMiddleware(mockConfig, mockLogger);
     const req = mockReq({ url: "/index.html" });
     const res = mockRes();
 
     // when
-    middlewareFn(req, res, mockNext);
+    middleware(req, res, mockNext);
 
     // then
     expectYield(res);

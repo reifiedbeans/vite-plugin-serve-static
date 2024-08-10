@@ -1,12 +1,18 @@
 import fs from "fs";
 import { contentType } from "mime-types";
 import path from "path";
-import { Connect } from "vite";
+import { Connect, Logger } from "vite";
 
-import { Config } from "./config.ts";
+import { Config as PluginConfig } from "./config.ts";
+import { setupLogger } from "./utils.ts";
 
-const middleware = (config: Config): Connect.NextHandleFunction => {
-  return (req, res, next) => {
+export function createMiddleware(
+  config: PluginConfig,
+  rawLogger: Logger,
+): Connect.NextHandleFunction {
+  const log = setupLogger(rawLogger);
+
+  return function serveStaticMiddleware(req, res, next) {
     if (!req.url) {
       return next();
     }
@@ -21,7 +27,7 @@ const middleware = (config: Config): Connect.NextHandleFunction => {
         if (!stats || !stats.isFile()) {
           res.writeHead(404);
           res.end("Not found");
-          console.error(`File ${filePath} is not a file`);
+          log.error(`File ${filePath} is not a file`);
           return;
         }
 
@@ -39,6 +45,4 @@ const middleware = (config: Config): Connect.NextHandleFunction => {
 
     return next();
   };
-};
-
-export default middleware;
+}
