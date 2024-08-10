@@ -7,10 +7,10 @@ export default function serveStatic(config: Config): Plugin {
   return {
     name: "serve-static",
     configureServer(server) {
-      applyMiddleware(server, config, server.config.server.cors);
+      applyMiddleware(server, config);
     },
     configurePreviewServer(server) {
-      applyMiddleware(server, config, server.config.preview.cors);
+      applyMiddleware(server, config);
     },
   };
 }

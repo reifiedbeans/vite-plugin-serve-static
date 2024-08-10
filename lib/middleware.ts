@@ -2,10 +2,10 @@ import corsMiddleware from "cors";
 import fs from "fs";
 import { contentType } from "mime-types";
 import path from "path";
-import { CommonServerOptions, Connect, Logger, PreviewServer, ViteDevServer } from "vite";
+import { Connect, Logger, PreviewServer, ViteDevServer } from "vite";
 
 import { Config as PluginConfig } from "./config.ts";
-import { setupLogger } from "./utils.ts";
+import { isDevServer, setupLogger } from "./utils.ts";
 
 export function createMiddleware(
   config: PluginConfig,
@@ -51,9 +51,9 @@ export function createMiddleware(
 export default function applyMiddleware(
   server: ViteDevServer | PreviewServer,
   pluginConfig: PluginConfig,
-  corsConfig: CommonServerOptions["cors"],
 ) {
   const pluginMiddleware = createMiddleware(pluginConfig, server.config.logger);
+  const corsConfig = isDevServer(server) ? server.config.server.cors : server.config.preview.cors;
 
   // https://github.com/vitejs/vite/blob/fcf50c2e881356ea0d725cc563722712a2bf5695/packages/vite/src/node/server/index.ts#L852-L854
   if (corsConfig !== false) {

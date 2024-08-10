@@ -1,4 +1,9 @@
-import { LogOptions, Logger } from "vite";
+import { LogOptions, Logger, PreviewServer, ViteDevServer } from "vite";
+
+// https://github.com/vitejs/vite/blob/e961b31493f8493277b46773156cc6e546b9c86b/packages/vite/src/node/utils.ts#L1353-L1357
+export function isDevServer(server: ViteDevServer | PreviewServer) {
+  return "pluginContainer" in server;
+}
 
 type LogFunction = (msg: string, options?: LogOptions) => void;
 export function setupLogger(logger: Logger) {
