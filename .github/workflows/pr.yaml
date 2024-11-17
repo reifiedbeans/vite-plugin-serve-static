@@ -1,16 +1,63 @@
 name: PR
 on:
   pull_request_target:
+    branches: [ main ]
     types:
       - opened
       - edited
       - synchronize
 
+permissions:
+  pull-requests: write
+  statuses: write
+
 jobs:
-  main:
+  validate:
     name: Validate PR title
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@e9fabac35e210fea40ca5b14c0da95a099eff26f
+      - name: Lint PR title
+        id: lint
+        uses: amannn/action-semantic-pull-request@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Display linting error as comment
+        if: always() && (steps.lint.outputs.error_message != null)
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: lint-error
+          message: |
+            Thanks for opening a pull request! This project requires pull request titles to follow the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/), and it looks like your proposed title needs to be adjusted.
+
+            Details:
+            ```
+            ${{steps.lint.outputs.error_message}}
+            ```
+
+      - name: Remove linting error comment
+        if: steps.lint.outputs.error_message == null
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: lint-error
+          delete: true
+
+      - name: Check release condition
+        id: release-condition
+        run: |
+          release_change_regex='(feat)|(fix)'
+          breaking_change_regex='.+!:'
+          change_type='${{steps.lint.outputs.type}}'
+          pr_title='${{github.event.pull_request.title}}'
+          if [[ "$change_type" =~ $release_change_regex || "$pr_title" =~ $breaking_change_regex ]]; then
+            echo 'release-specifier=will create a release' >> "$GITHUB_OUTPUT"
+          else
+            echo 'release-specifier=will not create a release' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Display release information as comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: release-info
+          message: |
+            This pull request **${{steps.release-condition.outputs.release-specifier}}**, as determined by applying the pull request title to the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/).
