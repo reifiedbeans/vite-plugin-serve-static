@@ -1,6 +1,6 @@
+import * as mime from "mime-types";
 import corsMiddleware from "cors";
 import fs from "fs";
-import { contentType } from "mime-types";
 import path from "path";
 import { Connect, Logger, PreviewServer, ViteDevServer } from "vite";
 
@@ -32,10 +32,10 @@ export function createMiddleware(
           return;
         }
 
-        const type = contentType(path.basename(filePath));
+        const type = mime.contentType(path.basename(filePath));
         res.writeHead(200, {
           "Content-Length": stats.size,
-          "Content-Type": type || undefined,
+          "Content-Type": type || "application/octet-stream",
         });
 
         const stream = fs.createReadStream(filePath);
