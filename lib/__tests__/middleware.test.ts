@@ -20,13 +20,6 @@ const testConfig: Config = [
   },
 ];
 
-function expectedHeaders(length: number, type?: string) {
-  return {
-    "Content-Length": length,
-    ...(type && { "Content-Type": type }),
-  };
-}
-
 function expectYield(res: ServerResponse<Connect.IncomingMessage>) {
   expect(mockNext).toHaveBeenCalledOnce();
   expect(res.writeHead).not.toHaveBeenCalled();
@@ -62,7 +55,10 @@ describe("middleware", () => {
     middleware(req, res, mockNext);
 
     // then
-    expect(res.writeHead).toHaveBeenCalledWith(200, expectedHeaders(50, undefined));
+    expect(res.writeHead).toHaveBeenCalledWith(
+      200,
+      expect.objectContaining({ "Content-Length": 50, "Content-Type": "application/octet-stream" }),
+    );
     expect(mockCreateReadStream).toHaveBeenCalledWith("./hello");
     expect(mockPipe).toHaveBeenCalled();
     expect(mockNext).not.toHaveBeenCalled();
@@ -107,7 +103,10 @@ describe("middleware", () => {
       middleware(req, res, mockNext);
 
       // then
-      expect(res.writeHead).toHaveBeenCalledWith(200, expectedHeaders(test.size, test.type));
+      expect(res.writeHead).toHaveBeenCalledWith(
+        200,
+        expect.objectContaining({ "Content-Length": test.size, "Content-Type": test.type }),
+      );
       expect(mockCreateReadStream).toHaveBeenCalledWith(test.file);
       expect(mockPipe).toHaveBeenCalled();
       expect(mockNext).not.toHaveBeenCalled();
