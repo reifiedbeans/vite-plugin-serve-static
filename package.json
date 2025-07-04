@@ -28,7 +28,7 @@
     "test": "vitest --run"
   },
   "peerDependencies": {
-    "vite": "^5.0.0 || ^6.0.0"
+    "vite": ">=5.0.0 <8.0.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
