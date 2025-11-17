@@ -16,7 +16,7 @@ const mockPipe = vi.fn();
 const testConfig: Config = [
   {
     pattern: /\/test-data\/(.*)/,
-    resolve: (groups) => `../test-data/${groups[1]}`,
+    resolve: (groups) => path.join("..", "test-data", groups[1] ?? ""),
   },
 ];
 
@@ -44,7 +44,7 @@ describe("middleware", () => {
     const config = [
       {
         pattern: /^\/hello/,
-        resolve: "./hello",
+        resolve: path.join(".", "hello"),
       },
     ];
     const middleware = createMiddleware(config, mockLogger);
@@ -59,7 +59,7 @@ describe("middleware", () => {
       200,
       expect.objectContaining({ "Content-Length": 50, "Content-Type": "application/octet-stream" }),
     );
-    expect(mockCreateReadStream).toHaveBeenCalledWith("./hello");
+    expect(mockCreateReadStream).toHaveBeenCalledWith(path.join(".", "hello"));
     expect(mockPipe).toHaveBeenCalled();
     expect(mockNext).not.toHaveBeenCalled();
   });
@@ -68,7 +68,7 @@ describe("middleware", () => {
     const config: Config = [
       {
         pattern: /^\/profile/,
-        resolve: () => "../profile.json",
+        resolve: () => path.join("..", "profile.json"),
       },
       {
         pattern: /^\/images\/.*/,
@@ -79,13 +79,13 @@ describe("middleware", () => {
     const tests = [
       {
         url: "/profile",
-        file: "../profile.json",
+        file: path.join("..", "profile.json"),
         size: 150,
         type: "application/json; charset=utf-8",
       },
       {
         url: "/images/cat.jpg",
-        file: "../images/cat.jpg",
+        file: path.join("..", "images", "cat.jpg"),
         size: 990,
         type: "image/jpeg",
       },

@@ -15,7 +15,7 @@ import serveStatic from "vite-plugin-serve-static";
 const serveStaticPlugin = serveStatic([
   {
     pattern: /^\/metadata\.json/,
-    resolve: "./metadata.json",
+    resolve: path.join(".", "metadata.json"),
   },
   {
     pattern: /^\/dog-photos\/.*/,
