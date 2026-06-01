@@ -41,7 +41,7 @@
     "rimraf": "^6.0.1",
     "tsdown": "^0.18.4",
     "typescript": "~5.7.2",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.0"
   },
   "publishConfig": {
     "access": "public",
