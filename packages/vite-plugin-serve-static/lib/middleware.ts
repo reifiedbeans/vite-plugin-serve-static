@@ -20,8 +20,10 @@ export function createMiddleware(
       return next();
     }
 
+    const requestPath = req.url.replace(/\?.*$/, "");
+
     for (const { pattern, resolve, headers } of config.rules) {
-      const match = pattern.exec(req.url);
+      const match = pattern.exec(requestPath);
 
       if (match) {
         const filePath = typeof resolve === "string" ? resolve : resolve(match);
