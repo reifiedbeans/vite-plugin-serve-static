@@ -21,7 +21,7 @@ const serveStaticPlugin = serveStatic({
     },
     {
       pattern: /^\/dog-photos\/.*/,
-      resolve: ([match]) => path.join("..", "dog-photos", match),
+      resolve: ([match]) => path.join("..", match),
     },
     {
       pattern: /^\/author-photos\/(.*)/,
