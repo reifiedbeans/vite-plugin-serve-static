@@ -120,6 +120,25 @@ describe("middleware", () => {
     }
   });
 
+  it("matches against the request path without the query string", () => {
+    const config: Config = {
+      rules: [
+        {
+          pattern: /^\/profile\/(.*)$/,
+          resolve: (match) => path.join("..", `${match[1]!}.json`),
+        },
+      ],
+    };
+    const middleware = createMiddleware(config, mockLogger);
+    const req = createMockReq({ url: "/profile/alice?size=small" });
+    const res = createMockRes();
+
+    middleware(req, res, mockNext);
+
+    expect(mockCreateReadStream).toHaveBeenCalledWith(path.join("..", "alice.json"));
+    expect(mockNext).not.toHaveBeenCalled();
+  });
+
   it("applies per-rule headers", () => {
     // given
     const config: Config = {
